@@ -1,1 +1,0 @@
-Telebirr Clone by Biruk is a project aimed at replicating the functionalities of the popular telecommunications app "Telebirr" in Ethiopia. This project serves as a clone, providing similar features and services to the original app. It is developed with the goal of offering an alternative solution or contributing to the understanding of app development in the Ethiopian context.
