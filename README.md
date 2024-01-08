@@ -33,16 +33,17 @@ Installation
 To run this Flutter project on your local machine, follow these steps:
 
 Clone the Repository:
-
 git clone https://github.com/br7tutorial/Telebirr-App-Clone.git
 cd Telebirr-App-Clone
 
-Install Dependencies:
 
+
+Install Dependencies:
 flutter pub get
 
-Run the Application:
 
+
+Run the Application:
 flutter run
 
 Ensure you have Flutter and Dart installed on your system. If not, refer to the official Flutter installation guide: Flutter Installation
