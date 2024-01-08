@@ -1,6 +1,7 @@
 Telebirr App Clone
-<img src = "![Screenshot_1704715562](https://github.com/birukbr7/Telebirr-clone-by-biruk/assets/106627959/37502f69-0ac8-42eb-a036-28e2a66ce57d)
-" width=200/>
+
+
+<img src="https://github.com/birukbr7/Telebirr-clone-by-biruk/assets/106627959/37502f69-0ac8-42eb-a036-28e2a66ce57d" width="200">
 
 
 This Flutter project is a clone of the Telebirr app, which is the main online banking application provided by Ethio Telecom. The clone, developed by Biruk (br7tutorial), aims to replicate the functionality and design of the Telebirr app using Flutter and Dart programming language.
