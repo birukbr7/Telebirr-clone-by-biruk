@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../screens/transfer_input.dart';
+import '../screens/transfer_to_bank_screen.dart'; 
+import '../screens/setup_number_screen.dart'; 
 
 class GridContent extends StatelessWidget {
   const GridContent({
@@ -24,32 +27,64 @@ class GridContent extends StatelessWidget {
       ),
       itemCount: 8,
       itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              gridIcon[index],
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                gridLabel[index],
-                maxLines: 3,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 12,
-                  letterSpacing: 0.5,
-                  fontWeight: FontWeight.w500,
-                  height: 0,
+        return InkWell(
+          onTap: () {
+            if (gridLabel[index].contains('Send Money')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransferInputScreen(
+                    transferType: 'Send Money',
+                  ),
                 ),
-              ),
-            ],
+              );
+            } 
+            else if (gridLabel[index].contains('Transfer to Bank')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const TransferToBankScreen(),
+                ),
+              );
+            }
+            // CASH IN/OUT OPENS SMS SENDER
+            else if (gridLabel[index].contains('Cash In/Out')) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SetupNumberScreen(),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                gridIcon[index],
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  gridLabel[index],
+                  maxLines: 3,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 12,
+                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -65,7 +100,7 @@ class GridIcons extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContextcontext) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: icon == Icons.ad_units_outlined
@@ -104,7 +139,7 @@ List<Widget> bottomGridIcon = const [
   Image(image: AssetImage('images/christmas.png'), width: 70),
   Image(image: AssetImage('images/ethio-logo.png'), width: 30),
   GridIcons(icon: Icons.calendar_month_outlined),
-  GridIcons(icon: FontAwesomeIcons.bank),
+  GridIcons(icon: FontAwesomeIcons.bank), 
   GridIcons(icon: Icons.wallet_sharp),
   GridIcons(icon: Icons.payments_outlined),
   GridIcons(icon: Icons.location_on),
