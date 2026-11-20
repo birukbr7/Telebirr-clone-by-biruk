@@ -22,7 +22,7 @@ dependencies:
   dot_navigation_bar: ^1.0.2
   flutter_launcher_icons: ^0.13.1
   url_launcher: ^6.1.11
-  shared_preferences: ^2.2.2
+  # I REMOVED shared_preferences here! It was breaking the build.
 
 dev_dependencies:
   flutter_test:
