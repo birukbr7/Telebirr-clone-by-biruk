@@ -23,6 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       child: Text('Account'),
     ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
