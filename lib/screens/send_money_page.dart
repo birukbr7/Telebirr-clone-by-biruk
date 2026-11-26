@@ -78,7 +78,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 ),
               ),
               child: const Column(
-                crossAxisAlignment: CrossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -266,7 +266,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   ),
                   child: ListTile(
                     leading: Container(
-width: 40,
+                      width: 40,
 height: 40,
 decoration: BoxDecoration(
 color: const Color(0xFFF5A623),
