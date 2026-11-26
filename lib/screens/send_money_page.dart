@@ -13,11 +13,11 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
   bool _isValid = false;
 
   final List<Map<String, String>> _recentContacts = [
+    {'name': 'Anewar', 'phone': '990103995'},
+    {'name': 'sanyii', 'phone': '911223344'},
     {'name': 'Mengistu', 'phone': '911000001'},
     {'name': 'BIRHANE', 'phone': '911000002'},
     {'name': 'KENANISA', 'phone': '911000003'},
-    {'name': 'desalegn', 'phone': '911000004'},
-    {'name': 'Abdulselam', 'phone': '911000005'},
   ];
 
   @override
@@ -30,6 +30,33 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     });
   }
 
+  void _navigateToAmount(String rawPhone, {String? customName}) {
+    final cleanDigits = rawPhone
+        .trim()
+        .replaceFirst(RegExp(r'^\+?251'), '')
+        .replaceFirst(RegExp(r'^0+'), '');
+
+    final formattedPhone = '251$cleanDigits';
+
+    final matchedContact = _recentContacts.firstWhere(
+      (c) => c['phone'] == cleanDigits,
+      orElse: () => {
+        'name': customName ?? 'Anewar',
+        'phone': cleanDigits,
+      },
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SendAmountPage(
+          recipientName: matchedContact['name']!,
+          phoneNumber: formattedPhone,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _phoneController.dispose();
@@ -39,7 +66,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
   @override
   Widget build(BuildContext context) {
     const primaryGreen = Color(0xFF8CC63F);
-    const activeBlue = Color(0xFF00AEEF);
+    const activeBlue = Color(0xFF008FD5);
     const disabledBlue = Color(0xFFC7E3F6);
 
     return Scaffold(
@@ -65,8 +92,9 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // FAYDA Promo Banner
             Container(
-              height: 120,
+              height: 110,
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -93,6 +121,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ),
             ),
             const SizedBox(height: 8),
+
+            // Carousel Indicator Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -116,6 +146,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ],
             ),
             const SizedBox(height: 16),
+
+            // Mobile Number Input Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -138,6 +170,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                     controller: _phoneController,
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
+                      hintText: '9xxxxxxxx',
+                      hintStyle: const TextStyle(color: Colors.black38),
                       prefixIcon: const Padding(
                         padding:
                             EdgeInsets.symmetric(horizontal: 14, vertical: 14),
@@ -183,33 +217,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                     height: 48,
                     child: ElevatedButton(
                       onPressed: _isValid
-                          ? () {
-                              final rawInput = _phoneController.text.trim();
-                              final cleanDigits =
-                                  rawInput.replaceFirst(RegExp(r'^0+'), '');
-                              final formattedPhone =
-                                  cleanDigits.startsWith('251')
-                                      ? cleanDigits
-                                      : '251$cleanDigits';
-
-                              final matchedContact = _recentContacts.firstWhere(
-                                (c) => c['phone'] == cleanDigits,
-                                orElse: () => {
-                                  'name': 'Anewar',
-                                  'phone': formattedPhone,
-                                },
-                              );
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SendAmountPage(
-                                    recipientName: matchedContact['name']!,
-                                    phoneNumber: formattedPhone,
-                                  ),
-                                ),
-                              );
-                            }
+                          ? () => _navigateToAmount(_phoneController.text)
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: activeBlue,
@@ -233,6 +241,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ),
             ),
             const SizedBox(height: 20),
+
+            // Recent Contacts Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -252,6 +262,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 ),
               ],
             ),
+
+            // Recent Contacts List
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -267,21 +279,29 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   child: ListTile(
                     leading: Container(
                       width: 40,
-height: 40,
-decoration: BoxDecoration(
-color: const Color(0xFFF5A623),
-borderRadius: BorderRadius.circular(6),
-),
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5A623),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
 child: const Icon(Icons.person, color: Colors.white),
 ),
 title: Text(
 contact['name']!,
 style: const TextStyle(fontWeight: FontWeight.w500),
 ),
+subtitle: Text(
+'251${contact['phone']!}',
+style: const TextStyle(fontSize: 12, color: Colors.black54),
+),
 trailing:
 const Icon(Icons.chevron_right, color: Colors.grey),
 onTap: () {
 _phoneController.text = contact['phone']!;
+_navigateToAmount(
+contact['phone']!,
+customName: contact['name'],
+);
 },
 ),
 );
