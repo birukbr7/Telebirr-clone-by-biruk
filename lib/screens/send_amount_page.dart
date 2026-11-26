@@ -37,6 +37,208 @@ class _SendAmountPageState extends State<SendAmountPage> {
     }
   }
 
+  void _showConfirmationBottomSheet() {
+    final double originalAmount = double.tryParse(_amount) ?? 0.0;
+    const double serviceFee = 1.00;
+    final double totalAmount = originalAmount + serviceFee;
+    const double availableBalance = 118.89;
+    const primaryGreen = Color(0xFF8CC63F);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFF5F6F8),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+          ),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.black87, size: 26),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              Text(
+                'Send Money to ${widget.recipientName}',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: totalAmount.toStringAsFixed(2),
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: 'ETB',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Original Amount',
+                          style: TextStyle(fontSize: 15, color: Colors.black54),
+                        ),
+                        Text(
+                          '${originalAmount.toStringAsFixed(2)}ETB',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Service fee',
+                          style: TextStyle(fontSize: 15, color: Colors.black54),
+                        ),
+                        Text(
+                          '${serviceFee.toStringAsFixed(2)}ETB',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Payment Method',
+                      style: TextStyle(fontSize: 15, color: Colors.black54),
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        Container(
+                          width: 34,
+                          height: 34,
+                          decoration: BoxDecoration(
+                            color: primaryGreen.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(
+                            Icons.account_balance_wallet,
+                            color: primaryGreen,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Balance',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '(Available Balance:${availableBalance.toStringAsFixed(2)}ETB)',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.check_circle,
+                          color: primaryGreen,
+                          size: 24,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryGreen,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Send',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _notesController.dispose();
@@ -84,209 +286,18 @@ class _SendAmountPageState extends State<SendAmountPage> {
                   ),
                   child: const Icon(Icons.person, color: Colors.white, size: 32),
                 ),
-                const SizedBox(width: 14),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.recipientName,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.phoneNumber,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              color: Colors.white,
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Amount',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          _amount,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 24,
-                        width: 1,
-                        color: Colors.grey.shade300,
-                        margin: const EdgeInsets.symmetric(horizontal: 12),
-                      ),
-                      const Text(
-                        '(ETB)',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Divider(height: 24, thickness: 1),
-                  TextField(
-                    controller: _notesController,
-                    decoration: const InputDecoration(
-                      hintText: 'Add notes(optional)',
-                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            color: const Color(0xFFF2F3F5),
-            padding:
-                const EdgeInsets.only(top: 6, left: 6, right: 6, bottom: 12),
-            child: Column(
-              children: [
-                const Icon(Icons.keyboard_arrow_down,
-                    color: Colors.grey, size: 20),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-                          _buildNumRow('1', '2', '3'),
-                          const SizedBox(height: 6),
-                          _buildNumRow('4', '5', '6'),
-                          const SizedBox(height: 6),
-                          _buildNumRow('7', '8', '9'),
-                          const SizedBox(height: 6),
-                          Row(
-                            children: [
-                              Expanded(flex: 2, child: _buildKeyButton('0')),
-                              const SizedBox(width: 6),
-                              Expanded(flex: 1, child: _buildKeyButton('.')),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 52,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _onBackspace,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black87,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                              ),
-                              child: const Icon(Icons.backspace_outlined,
-                                  size: 22),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          SizedBox(
-                            height: 168,
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: hasAmount ? () {} : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryGreen,
-                                disabledBackgroundColor: disabledGreen,
-                                foregroundColor: Colors.white,
-                                disabledForegroundColor: Colors.white,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                              ),
-                              child: const Text(
-                                'OK',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNumRow(String first, String second, String third) {
-    return Row(
-      children: [
-        Expanded(child: _buildKeyButton(first)),
-        const SizedBox(width: 6),
-        Expanded(child: _buildKeyButton(second)),
-        const SizedBox(width: 6),
-        Expanded(child: _buildKeyButton(third)),
-      ],
-    );
-  }
-
-  Widget _buildKeyButton(String label) {
-    return SizedBox(
-      height: 52,
-      child: ElevatedButton(
-        onPressed: () => _onKeyPress(label),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-        ),
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-        ),
-      ),
-    );
-  }
+backgroundColor: Colors.white,
+foregroundColor: Colors.black87,
+elevation: 0,
+shape: RoundedRectangleBorder(
+borderRadius: BorderRadius.circular(6),
+),
+),
+child: Text(
+label,
+style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+),
+),
+);
 }
+                }
