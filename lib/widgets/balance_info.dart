@@ -1,7 +1,17 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+class BalanceNotifier {
+  static final ValueNotifier<double> currentBalance =
+      ValueNotifier<double>(800000.00);
+
+  static void deduct(double amount) {
+    final double updated = currentBalance.value - amount;
+    currentBalance.value = updated > 0
+        ? double.parse(updated.toStringAsFixed(2))
+        : 0.00;
+  }
+}
 
 class BalanceInfo extends StatefulWidget {
   final String label;
@@ -22,7 +32,7 @@ class BalanceInfo extends StatefulWidget {
 }
 
 class _BalanceInfoState extends State<BalanceInfo> {
-  bool showBalance = false;
+  bool showBalance = true;
 
   void toggleBalanceVisibility() {
     setState(() {
@@ -32,12 +42,13 @@ class _BalanceInfoState extends State<BalanceInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final String balance =
-        showBalance ? Random().nextInt(1000).toString() : '******';
+    final bool isMainBalance = widget.label.toLowerCase().contains('balance');
+
     return Column(
       crossAxisAlignment: widget.crossAxisAlignment,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -47,6 +58,7 @@ class _BalanceInfoState extends State<BalanceInfo> {
                 fontSize: widget.labelFontSize,
               ),
             ),
+            const SizedBox(width: 4),
             InkWell(
               onTap: toggleBalanceVisibility,
               child: Icon(
@@ -59,15 +71,24 @@ class _BalanceInfoState extends State<BalanceInfo> {
             ),
           ],
         ),
-        Text(
-          balance,
-          style: GoogleFonts.roboto(
-            textStyle: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: widget.balanceFontSize,
-            ),
-          ),
+        ValueListenableBuilder<double>(
+          valueListenable: BalanceNotifier.currentBalance,
+          builder: (context, liveBalance, _) {
+            final String balance = !showBalance
+                ? '******'
+                : (isMainBalance ? liveBalance.toStringAsFixed(2) : '0.00');
+
+            return Text(
+              balance,
+              style: GoogleFonts.roboto(
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: widget.balanceFontSize,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
