@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'transaction_success_page.dart';
 
 class SendAmountPage extends StatefulWidget {
   final String recipientName;
@@ -21,6 +22,10 @@ class _SendAmountPageState extends State<SendAmountPage> {
   void _onKeyPress(String value) {
     setState(() {
       if (value == '.' && _amount.contains('.')) return;
+      if (_amount.contains('.')) {
+        final parts = _amount.split('.');
+        if (parts.length > 1 && parts[1].length >= 2) return;
+      }
       if (_amount == '0' && value != '.') {
         _amount = value;
       } else {
@@ -214,6 +219,15 @@ class _SendAmountPageState extends State<SendAmountPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TransactionSuccessPage(
+                          amount: originalAmount,
+                          recipientName: widget.recipientName,
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryGreen,
@@ -245,59 +259,110 @@ class _SendAmountPageState extends State<SendAmountPage> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final bool hasAmount =
-        _amount.isNotEmpty && (double.tryParse(_amount) ?? 0) > 0;
-    const primaryGreen = Color(0xFF8CC63F);
-    const disabledGreen = Color(0xFFD5E8C4);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F6F8),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Send Money',
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            color: const Color(0xFFF5F6F8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Row(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5A623),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.person, color: Colors.white, size: 32),
-                ),
-backgroundColor: Colors.white,
-foregroundColor: Colors.black87,
+  Widget _buildKeyButton(String label, {VoidCallback? onTap}) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: SizedBox(
+          height: 52,
+          child: ElevatedButton(
+            onPressed: onTap ?? () => _onKeyPress(label),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black87,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+            child: label == 'BACKSPACE'
+                ? const Icon(Icons.backspace_outlined, size: 22)
+                : Text(
+                    label,
+                    style: const TextStyle(
+),
+],
+),
+const Divider(height: 24, thickness: 1, color: Color(0xFFEEEEEE)),
+TextField(
+controller: _notesController,
+decoration: const InputDecoration(
+border: InputBorder.none,
+hintText: 'Add notes(optional)',
+hintStyle: TextStyle(color: Colors.black45, fontSize: 14),
+isDense: true,
+contentPadding: EdgeInsets.zero,
+),
+),
+],
+),
+),
+const Spacer(),
+Padding(
+padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+child: SizedBox(
+width: double.infinity,
+height: 48,
+child: ElevatedButton(
+onPressed: hasAmount ? _showConfirmationBottomSheet : null,
+style: ElevatedButton.styleFrom(
+backgroundColor: primaryGreen,
+disabledBackgroundColor: disabledGreen,
+foregroundColor: Colors.white,
+disabledForegroundColor: Colors.white,
 elevation: 0,
 shape: RoundedRectangleBorder(
-borderRadius: BorderRadius.circular(6),
+borderRadius: BorderRadius.circular(8),
 ),
 ),
-child: Text(
-label,
-style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+child: const Text(
+'Next',
+style: TextStyle(
+fontSize: 16,
+fontWeight: FontWeight.w600,
 ),
+),
+),
+),
+),
+Container(
+color: const Color(0xFFEBECEF),
+padding: const EdgeInsets.fromLTRB(6, 6, 6, 16),
+child: Column(
+children: [
+Row(
+children: [
+_buildKeyButton('1'),
+_buildKeyButton('2'),
+_buildKeyButton('3'),
+],
+),
+Row(
+children: [
+_buildKeyButton('4'),
+_buildKeyButton('5'),
+_buildKeyButton('6'),
+],
+),
+Row(
+children: [
+_buildKeyButton('7'),
+_buildKeyButton('8'),
+_buildKeyButton('9'),
+],
+),
+Row(
+children: [
+_buildKeyButton('.'),
+_buildKeyButton('0'),
+_buildKeyButton('BACKSPACE', onTap: _onBackspace),
+],
+),
+],
+),
+),
+],
 ),
 );
 }
-                }
+}
