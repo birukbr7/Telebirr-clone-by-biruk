@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'send_amount_page.dart';
 
 class SendMoneyPage extends StatefulWidget {
   const SendMoneyPage({super.key});
@@ -64,7 +65,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Promo Banner Card
             Container(
               height: 120,
               width: double.infinity,
@@ -78,7 +78,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 ),
               ),
               child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -93,8 +93,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ),
             ),
             const SizedBox(height: 8),
-
-            // Carousel Indicator Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -118,8 +116,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ],
             ),
             const SizedBox(height: 16),
-
-            // Mobile Number Input Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -143,7 +139,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
                       prefixIcon: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                         child: Text(
                           '+251',
                           style: TextStyle(
@@ -157,22 +154,26 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.qr_code_scanner, color: primaryGreen),
+                            icon: const Icon(Icons.qr_code_scanner,
+                                color: primaryGreen),
                             onPressed: () {},
                           ),
                           IconButton(
-                            icon: const Icon(Icons.contact_phone_outlined, color: primaryGreen),
+                            icon: const Icon(Icons.contact_phone_outlined,
+                                color: primaryGreen),
                             onPressed: () {},
                           ),
                         ],
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: primaryGreen, width: 1.5),
+                        borderSide:
+                            const BorderSide(color: primaryGreen, width: 1.5),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: primaryGreen, width: 2),
+                        borderSide:
+                            const BorderSide(color: primaryGreen, width: 2),
                       ),
                     ),
                   ),
@@ -181,7 +182,35 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: _isValid ? () {} : null,
+                      onPressed: _isValid
+                          ? () {
+                              final rawInput = _phoneController.text.trim();
+                              final cleanDigits =
+                                  rawInput.replaceFirst(RegExp(r'^0+'), '');
+                              final formattedPhone =
+                                  cleanDigits.startsWith('251')
+                                      ? cleanDigits
+                                      : '251$cleanDigits';
+
+                              final matchedContact = _recentContacts.firstWhere(
+                                (c) => c['phone'] == cleanDigits,
+                                orElse: () => {
+                                  'name': 'Anewar',
+                                  'phone': formattedPhone,
+                                },
+                              );
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SendAmountPage(
+                                    recipientName: matchedContact['name']!,
+                                    phoneNumber: formattedPhone,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: activeBlue,
                         disabledBackgroundColor: disabledBlue,
@@ -204,8 +233,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Recent Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -225,8 +252,6 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 ),
               ],
             ),
-
-            // Recent Contacts List
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -241,30 +266,30 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   ),
                   child: ListTile(
                     leading: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5A623),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Icon(Icons.person, color: Colors.white),
-                    ),
-                    title: Text(
-                      contact['name']!,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                    onTap: () {
-                      _phoneController.text = contact['phone']!;
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+width: 40,
+height: 40,
+decoration: BoxDecoration(
+color: const Color(0xFFF5A623),
+borderRadius: BorderRadius.circular(6),
+),
+child: const Icon(Icons.person, color: Colors.white),
+),
+title: Text(
+contact['name']!,
+style: const TextStyle(fontWeight: FontWeight.w500),
+),
+trailing:
+const Icon(Icons.chevron_right, color: Colors.grey),
+onTap: () {
+_phoneController.text = contact['phone']!;
+},
+),
+);
+},
+),
+],
+),
+),
+);
 }
-
+}
