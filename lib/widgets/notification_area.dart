@@ -11,25 +11,22 @@ class NotificationArea extends StatelessWidget {
     return const Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(right: 5.0),
+          padding: EdgeInsets.only(right: 12.0),
           child: Icon(
             Icons.search,
             color: Colors.white,
-            size: 20,
+            size: 22,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(right: 15),
-          child: Badge(
-            label: Text('23'),
-            child: Icon(
-              Icons.notifications_none_outlined,
-              color: Colors.white,
-              size: 20,
-            ),
+          padding: EdgeInsets.only(right: 12.0),
+          child: Icon(
+            Icons.notifications_none_outlined,
+            color: Colors.white,
+            size: 22,
           ),
         ),
-        DropDownLang()
+        DropDownLang(),
       ],
     );
   }
